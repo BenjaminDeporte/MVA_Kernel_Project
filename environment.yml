@@ -1,0 +1,11 @@
+name : kernel_project
+dependencies :
+  - python
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - pytorch
+  - ipykernel
+  - jupyter

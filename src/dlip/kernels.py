@@ -1,4 +1,5 @@
 # file for Kernels classes
+import numpy as np
 
 # DNA alphabet
 dna_alphabet = ['A','G','C','T']
@@ -7,6 +8,10 @@ dna_alphabet = ['A','G','C','T']
 from itertools import product
 # import counter for counting uplets
 from collections import Counter
+
+#----------------------------------------------
+#   KERNEL SPECTRUM 
+#----------------------------------------------
 
 class KernelSpectrum():
     
@@ -25,6 +30,28 @@ class KernelSpectrum():
         self.all_kuplets = [ ''.join(t) for t in iter_tuples]
         
     def k_value(self,x1,x2):
+        """Compute K(x,y)
+
+        Args:
+            x1 (_type_): string, or array of one string
+            x2 (_type_): string, or array of one string
+
+        Raises:
+            NameError: if not string in inputs
+
+        Returns:
+            _type_: kernel_spectrum(x1,x2)
+        """
+        # type check and recast
+        if isinstance(x1, np.ndarray):
+            x1 = x1.squeeze()
+            x1 = x1[0]
+        if isinstance(x2, np.ndarray):
+            x2 = x2.squeeze()
+            x2 = x2[0]
+        if isinstance(x1, str) is False or isinstance(x2, str) is False:
+            raise NameError('Can not compute a kernel on data not string')
+            
         # list all k-uplets in x1
         x1_kuplets = [ x1[i:i+self.k] for i in range(len(x1)-self.k+1) ]
         c1 = Counter()
@@ -42,12 +69,56 @@ class KernelSpectrum():
             kernel += occurences_in_x1 * occurences_in_x2
             
         return kernel
+    
+    def k_matrix(self, xs, ys):
+        """compute and return Gram matrix K(x_i, y_j) 
+        for i in range(xs), j in range(xs)
+
+        Args:
+            xs (_type_): array of strings
+            ys (_type_): array of strings
+        """
+        x_data = xs
+        y_data = ys
+        if isinstance(xs, list) is True:
+            x_data = np.array(xs)
+        if isinstance(ys, list) is True:
+            y_data = np.array(ys)
+                
+        if isinstance(x_data, np.ndarray) is False or isinstance(y_data, np.ndarray) is False:
+            raise NameError('can not compute design matrix - input is not an array')
+        
+        nx = x_data.shape[0]
+        ny = y_data.shape[0]
+        gram = np.zeros((nx, ny))
+        
+        for i in range(nx):
+            x_i = x_data[i]
+            for j in range(ny):
+                y_j = y_data[j]
+                gram[i,j] = self.k_value(x_i, y_j)
+    
+        return gram
+
+
+#----------------------------------------
+# MISMATCH
+#----------------------------------------
 
 class KernelMismatch():
     pass
 
+#----------------------------------------
+# SUBSTRING
+#----------------------------------------
+
 class KernelSubstring():
     pass
+
+
+#------------------------------------------
+# TESTS
+#-----------------------------------------
 
 def test_kernel_spectrum():
     
@@ -66,6 +137,14 @@ def test_kernel_spectrum():
         target = test[2]
         k_value = ks.k_value(x1,x2)
         assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
+        
+    tests2 = [
+        ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'AAACGTGCAAA']
+    ]
+        
+    for xs in tests2:
+        gram = ks.k_matrix(xs,xs)
+        print(gram)
         
     print(f"Tests passés avec succès")
     

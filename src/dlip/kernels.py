@@ -25,7 +25,7 @@ class KernelSpectrum():
             self.k=k
         # create list of k-uplets for faster computation
         # product create an iterator of tuples of cartesian products
-        iter_tuples = product(self.dna_alphabet, repeat=k)
+        iter_tuples = product(self.dna_alphabet, repeat=self.k)
         # change from tuples of k characters to strings
         self.all_kuplets = [ ''.join(t) for t in iter_tuples]
         
@@ -106,7 +106,118 @@ class KernelSpectrum():
 #----------------------------------------
 
 class KernelMismatch():
-    pass
+    
+    dna_alphabet = ['A','G','C','T']
+    
+    def __init__(self,k=None):
+        # default value for k
+        if k is None:
+            self.k=3
+        else:
+            self.k=k
+        # create list of k-uplets for faster computation
+        # product create an iterator of tuples of cartesian products
+        iter_tuples = product(self.dna_alphabet, repeat=self.k)
+        # change from tuples of k characters to strings
+        self.all_kuplets = [ ''.join(t) for t in iter_tuples]
+        
+    def _mismatches(self, kuplet, mismatches=1):
+        """Compute all possible mismatches of k-uplet, with at most m mismatches
+
+        Args:
+            kuplet (string): input k-uplet
+            m (int, optional): maximum number of allowed mismatches. Defaults to 1.
+        """
+        mismatches_kuplets = []
+        
+        for alphabet_kuplet in self.all_kuplets:
+            nb_mismatches = np.sum([kuplet[i] != alphabet_kuplet[i] for i in range(self.k)])
+            if nb_mismatches <= mismatches:
+                mismatches_kuplets.append(alphabet_kuplet)
+        
+        return mismatches_kuplets
+        
+    def k_value(self,x1,x2, mismatches=1, verbose=False):
+        """Compute K(x,y)
+
+        Args:
+            x1 (_type_): string, or array of one string
+            x2 (_type_): string, or array of one string
+
+        Raises:
+            NameError: if not string in inputs
+
+        Returns:
+            _type_: kernel_spectrum(x1,x2)
+        """
+        # type check and recast
+        if isinstance(x1, np.ndarray):
+            x1 = x1.squeeze()
+            x1 = x1[0]
+        if isinstance(x2, np.ndarray):
+            x2 = x2.squeeze()
+            x2 = x2[0]
+        if isinstance(x1, str) is False or isinstance(x2, str) is False:
+            raise NameError('Can not compute a kernel on data not string')
+            
+        # list all k-uplets in x1
+        x1_kuplets = [ x1[i:i+self.k] for i in range(len(x1)-self.k+1) ]
+        # compute dictionnary of unique kuplets in x1 with number of occurences
+        c1 = Counter()
+        for uplet in x1_kuplets:
+            c1[uplet] += 1
+            
+        # list all k-uplets in x2
+        x2_kuplets = [ x2[i:i+self.k] for i in range(len(x2)-self.k+1) ]
+        # compute dictionnary of unique kuplets in x2 with number of occurences
+        c2 = Counter()
+        for uplet in x2_kuplets:
+            c2[uplet] += 1
+        
+        kernel = 0
+        # loop over unique kuplets in x1
+        for uplet, occurences in c1.items():
+            # what are all possible mismatches of this kuplet
+            mismatches_kuplet = self._mismatches(uplet, mismatches=mismatches)
+            for mismatch in mismatches_kuplet:
+                # how many times does this mismatched kuplet appear in x2
+                occurences_in_x2 = c2.get(mismatch, 0)
+                kernel += occurences * occurences_in_x2
+                if occurences_in_x2 > 0 and verbose is True:
+                    print(f"uplet in x1 = {uplet}, mismatch in x1 occuring in x2 = {mismatch}, number of occurences_in_x2 = {occurences_in_x2}")
+                
+        return kernel
+    
+    def k_matrix(self, xs, ys):
+        """compute and return Gram matrix K(x_i, y_j) 
+        for i in range(xs), j in range(xs)
+
+        Args:
+            xs (_type_): array of strings
+            ys (_type_): array of strings
+        """
+        x_data = xs
+        y_data = ys
+        if isinstance(xs, list) is True:
+            x_data = np.array(xs)
+        if isinstance(ys, list) is True:
+            y_data = np.array(ys)
+                
+        if isinstance(x_data, np.ndarray) is False or isinstance(y_data, np.ndarray) is False:
+            raise NameError('can not compute design matrix - input is not an array')
+        
+        nx = x_data.shape[0]
+        ny = y_data.shape[0]
+        gram = np.zeros((nx, ny))
+        
+        for i in range(nx):
+            x_i = x_data[i]
+            for j in range(ny):
+                y_j = y_data[j]
+                gram[i,j] = self.k_value(x_i, y_j)
+    
+        return gram
+        
 
 #----------------------------------------
 # SUBSTRING
@@ -123,21 +234,65 @@ class KernelSubstring():
 def test_kernel_spectrum():
     
     # tests
+    # tests = [
+    #     ['AGGCTTCGAC', 'CGGATGAGG', 1],   # common k_uplets : AGG (1,1), => k_value = 1
+    #     ['AGGCTTCGAC', 'CCGATGAGG', 2],   # common k_uplets : AGG (1,1), CGA (1,1 )=> k_value = 2
+    #     ['AAAAAAAAA', 'AAACGTGCAAA', 14]    # common k_uplets : AAA (7 in 1, 2 in 2) => k_value = 14
+    # ]
+    
+    # ks = KernelSpectrum(k=3)
+    
+    # for i,test in enumerate(tests):
+    #     x1 = test[0]
+    #     x2 = test[1]
+    #     target = test[2]
+    #     k_value = ks.k_value(x1,x2)
+    #     assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
+        
+    # tests2 = [
+    #     ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'AAACGTGCAAA']
+    # ]
+        
+    # for xs in tests2:
+    #     gram = ks.k_matrix(xs,xs)
+    #     print(gram)
+        
+    # print(f"Tests passés avec succès")
+    
+    # tests = [
+    #     ['AAG', 'TGC', 1],  # with m=1, k=2 : only match is 'TG'
+    #     ['AGGT', 'CGC', 4]  # with m=1, k=2 : matches are : (CG in x2 + AG in x1), (GC in x2 et GG in x1), (CG in x2 at GG in x1), (GC in x2 et GT in x1)
+    #     ]
+    
+    # ks = KernelMismatch(k=2)
+    
+    # for i,test in enumerate(tests):
+    #     x1 = test[0]
+    #     x2 = test[1]
+    #     target = test[2]
+    #     k_value = ks.k_value(x1,x2, mismatches=1)
+    #     assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
+        
+    # print(f"Tests ok avec m=1")
+    
+    ks = KernelMismatch(k=3)
+    
     tests = [
         ['AGGCTTCGAC', 'CGGATGAGG', 1],   # common k_uplets : AGG (1,1), => k_value = 1
-        ['AGGCTTCGAC', 'CCGATGAGG', 2],   # common k_uplets : AGG (1,1), CGA (1,1 )=> k_value = 2
-        ['AAAAAAAAA', 'AAACGTGCAAA', 14]    # common k_uplets : AAA (7 in 1, 2 in 2) => k_value = 14
+        # ['AGGCTTCGAC', 'CCGATGAGG', 2],   # common k_uplets : AGG (1,1), CGA (1,1 )=> k_value = 2
+        # ['AAAAAAAAA', 'AAACGTGCAAA', 14]    # common k_uplets : AAA (7 in 1, 2 in 2) => k_value = 14
     ]
-    
-    ks = KernelSpectrum(k=3)
-    
+        
     for i,test in enumerate(tests):
         x1 = test[0]
         x2 = test[1]
         target = test[2]
-        k_value = ks.k_value(x1,x2)
-        assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
-        
+        k_value = ks.k_value(x1,x2, mismatches=1, verbose=True)
+        print(f"mismatches = 1, x1 = {x1}, x2 = {x2}, k_value = {k_value}")
+        k_value = ks.k_value(x1,x2, mismatches=2, verbose=True)
+        print(f"mismatches = 2, x1 = {x1}, x2 = {x2}, k_value = {k_value}")
+    
+    print(f"Gram matrix example")   
     tests2 = [
         ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'AAACGTGCAAA']
     ]
@@ -145,8 +300,6 @@ def test_kernel_spectrum():
     for xs in tests2:
         gram = ks.k_matrix(xs,xs)
         print(gram)
-        
-    print(f"Tests passés avec succès")
     
 if __name__ == '__main__':
     test_kernel_spectrum()

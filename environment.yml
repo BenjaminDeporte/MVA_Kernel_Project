@@ -9,3 +9,4 @@ dependencies :
   - pytorch
   - ipykernel
   - jupyter
+  - tqdm

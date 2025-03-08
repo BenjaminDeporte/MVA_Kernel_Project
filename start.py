@@ -10,7 +10,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from src.kernels import KernelSpectrum
+from src.kernels import KernelSpectrum, KernelMismatch
 from sklearn.metrics import accuracy_score
 import os
 
@@ -35,17 +35,26 @@ with open(labelname, 'r') as g:
 
 # instantiate kernel
 k = 3
-ks = KernelSpectrum(k=k)
+
+# choix = 'spectrum'
+choix = 'mismatch'
+
+if choix == 'spectrum':
+    ks = KernelSpectrum(k=k)
+else :
+    ks = KernelMismatch(k=k)
+
 kernel = ks.k_value
 
 # go Forest, go
 clf = SVC(kernel='precomputed')
 
-N = 500
+N = 100
 X = X[:N]
 y = y[:N]
 
-print(f"Running model on {N} samples, kernel sur longueur {k}")
+print(f"Running model on {N} samples, kernel {choix} avec k = {k}")
+
 id_train = int(N * .9)
 X_train = np.array(X).squeeze()[:id_train]
 y_train = np.array(y).squeeze()[:id_train]
@@ -53,13 +62,19 @@ X_test = np.array(X).squeeze()[id_train:]
 y_test = np.array(y).squeeze()[id_train:]
 
 print(f"Computing Gram matrix on X_train")
-gram = ks.k_matrix(X_train, X_train)
+if choix == 'spectrum':
+    gram = ks.k_matrix(X_train, X_train)
+else :
+    gram = ks.k_matrix(X_train, X_train, verbose=True)
 
 print(f"Fitting model")
 clf.fit(gram, y_train)
 
 print(f"Computing Gram matrix on X_test")
-gramt = ks.k_matrix(X_test, X_train)
+if choix == 'spectrum':
+    gramt = ks.k_matrix(X_test, X_train)
+else :
+    gramt = ks.k_matrix(X_test, X_train, verbose=True)
 
 print(f"Computing prediction and accuracy")
 y_pred = clf.predict(gramt)

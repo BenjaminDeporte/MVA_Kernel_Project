@@ -1,5 +1,6 @@
 # file for Kernels classes
 import numpy as np
+from tqdm import tqdm
 
 # DNA alphabet
 dna_alphabet = ['A','G','C','T']
@@ -188,7 +189,7 @@ class KernelMismatch():
                 
         return kernel
     
-    def k_matrix(self, xs, ys):
+    def k_matrix(self, xs, ys, verbose=False):
         """compute and return Gram matrix K(x_i, y_j) 
         for i in range(xs), j in range(xs)
 
@@ -210,11 +211,18 @@ class KernelMismatch():
         ny = y_data.shape[0]
         gram = np.zeros((nx, ny))
         
-        for i in range(nx):
-            x_i = x_data[i]
-            for j in range(ny):
-                y_j = y_data[j]
-                gram[i,j] = self.k_value(x_i, y_j)
+        if verbose is True:
+            for i in tqdm(range(nx)):
+                x_i = x_data[i]
+                for j in range(ny):
+                    y_j = y_data[j]
+                    gram[i,j] = self.k_value(x_i, y_j)
+        else:
+            for i in tqdm(range(nx)):
+                x_i = x_data[i]
+                for j in range(ny):
+                    y_j = y_data[j]
+                    gram[i,j] = self.k_value(x_i, y_j)
     
         return gram
         

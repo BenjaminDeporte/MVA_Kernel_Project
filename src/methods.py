@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import optimize, LinearConstraint
+from scipy import optimize#, LinearConstraint
 
 #----------------------------------------
 # ALGO SVC BEN
@@ -84,7 +84,7 @@ class KernelSVCBen():
     def predict(self, X):
         """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
-        return 2 * (d+self.b> 0) - 1
+        return d+self.b> 0
 
 
 #----------------------------------------
@@ -162,4 +162,4 @@ class KernelSVCLilian():
     def predict(self, X):
         """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
-        return 2 * (d+self.b> 0) - 1
+        return d+self.b> 0

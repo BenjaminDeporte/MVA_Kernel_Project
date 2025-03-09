@@ -1,41 +1,51 @@
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 from src.data_loader import load_dataset
-from src.methods import KernelSVCBen, KernelSVCLilian
+from src.methods import KernelSVCBen, KernelSVCLilian, KernelLR
 
-def train_model(k, kernel, C=1.0, method='ben'):
+def train_model(k, kernel, C=1.0, method='SVM', test_size=0.2, random_state=42):
     """
-    Train a Kernel SVM model on dataset k.
+    Train a Kernel SVM model on dataset k and evaluate on a validation set.
 
     Args:
         k (int): Dataset index (0,1,2).
         kernel (function): Kernel function (linear or RBF).
         C (float): Regularization parameter.
         method (str): 'ben' or 'lilian' (choose SVM implementation).
+        test_size (float): Fraction of data to use for validation.
+        random_state (int): Random seed for reproducibility.
 
     Returns:
         model (object): Trained model.
-        accuracy (float): Training accuracy.
+        val_accuracy (float): Validation accuracy.
     """
     print(f"\nTraining on dataset k={k}")
 
-    X_train, Y_train, _ = load_dataset(k)
+    X, Y, _ = load_dataset(k)
 
-    if method == 'ben':
-        model = KernelSVCBen(C=C, kernel=kernel)
-    else:
+    X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=test_size, random_state=random_state)
+
+    if method == 'SVM':
         model = KernelSVCLilian(C=C, kernel=kernel)
+    else:
+        model = KernelLR(kernel=kernel, lmbda=0.01, iters=1000, tol=1.e-5)
 
     model.fit(X_train, Y_train)
 
     Y_pred_train = model.predict(X_train)
-    acc = accuracy_score(Y_train, Y_pred_train)
-    print(f"Training Accuracy for k={k}: {acc:.4f}")
+    Y_pred_val = model.predict(X_val)
 
-    return model, acc
+    train_acc = accuracy_score(Y_train, Y_pred_train)
+    val_acc = accuracy_score(Y_val, Y_pred_val)
+    
+    print(f"Training Accuracy for k={k}: {train_acc:.4f}")
+    print(f"Validation Accuracy for k={k}: {val_acc:.4f}")
 
-def train_all_models(kernel, C=1.0, method='ben'):
+    return model, val_acc
+
+def train_all_models(kernel, C=1.0, method='SVM'):
     """
-    Train models for all datasets (k=0,1,2).
+    Train models for all datasets (k=0,1,2) with a validation set.
 
     Args:
         kernel (function): Kernel function (linear or RBF).
@@ -44,14 +54,15 @@ def train_all_models(kernel, C=1.0, method='ben'):
 
     Returns:
         models (dict): Trained models for k=0,1,2.
-        accuracies (dict): Training accuracies for k=0,1,2.
+        accuracies (dict): Validation accuracies for k=0,1,2.
     """
     models = {}
     accuracies = {}
 
     for k in range(3):
-        model, acc = train_model(k, kernel, C, method)
+        model, val_acc = train_model(k, kernel, C, method)
         models[k] = model
-        accuracies[k] = acc
+        accuracies[k] = val_acc
 
     return models, accuracies
+

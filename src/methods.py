@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import optimize#, LinearConstraint
+from src.utils import sigmoid
 
 #----------------------------------------
 # ALGO SVC BEN
@@ -156,10 +157,78 @@ class KernelSVCLilian():
         # Input : matrix x of shape N data points times d dimension
         # Output: vector of size N
         K_val = self.kernel(self.support, x)
-        return np.sum((self.support_alpha*self.support_y)[:, np.newaxis]*K_val, axis=0)
+        return (self.support_alpha*self.support_y)@K_val
     
     
     def predict(self, X):
-        """ Predict y values in {-1, 1} """
+        """ Predict y values in {0, 1} """
         d = self.separating_function(X)
         return d+self.b> 0
+
+#----------------------------------------
+# ALGO KLR
+#----------------------------------------
+class WeightedKernelRR:
+    def __init__(self, kernel, weights, lmbda):
+        self.lmbda = lmbda
+        self.kernel = kernel
+        self.weights = weights
+        self.alpha = None
+        self.b = None
+        self.support = None
+        self.type = "ridge"
+
+    def fit(self, y):
+        #self.support = X
+        #kernel = self.kernel(X, X)
+        W = np.sqrt(np.diag(self.weights))
+        n = len(y)
+        inv = np.linalg.inv(W@self.kernel@W + self.lmbda * n * np.eye(n))
+        self.alpha = np.dot(W, np.dot(inv, np.dot(W, y)))
+        #self.b = -np.mean(self.regression_function(X))
+
+    ### Implementation of the separeting function $f$
+    def regression_function(self, x):
+        # Input : matrix x of shape N data points times d dimension
+        # Output: vector of size N
+        return self.kernel(x, self.support) @ self.alpha.T
+
+    def predict(self, X):
+        return self.regression_function(X) + self.b
+
+class KernelLR:
+    def __init__(self, kernel, lmbda, iters, tol):
+        self.lmbda = lmbda
+        self.kernel = kernel
+        self.iters = iters
+        self.tol = tol
+        self.alpha = None
+        self.b = None
+        self.support = None
+        self.type = "ridge"
+
+    def fit(self, X, y):
+        self.support = X
+        kernel = self.kernel(X, X)
+        n = len(y)
+        self.alpha = np.random.rand(n)
+        for _ in range(self.iters):
+            alpha0 = self.alpha
+            m = kernel@self.alpha.T
+            W = sigmoid(y*m)*sigmoid(-y*m)
+            z = m + y/np.maximum(sigmoid(y*m), 1.e-6)
+            wkrr = WeightedKernelRR(kernel=kernel, weights=W, lmbda=self.lmbda)
+            wkrr.fit(z)
+            self.alpha = wkrr.alpha
+
+            if np.linalg.norm(self.alpha - alpha0) < self.tol:
+                break
+            
+    ### Implementation of the separeting function $f$
+    def regression_function(self, x):
+        # Input : matrix x of shape N data points times d dimension
+        # Output: vector of size N
+        return self.kernel(x, self.support) @ self.alpha.T
+
+    def predict(self, X):
+        return np.array(sigmoid(self.regression_function(X))>=0.5, dtype=int)

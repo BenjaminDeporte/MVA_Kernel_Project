@@ -15,7 +15,7 @@ def main():
     kernel_method = KernelSpectrum(k=8)
     #kernel_method = KernelMismatch(k=3)
 
-    models, _ = train_all_models(kernel=kernel_method.k_matrix, C=1.0, method='KLR')
+    models, _ = train_all_models(kernel=kernel_method.k_matrix, method='SVM')
 
     predict_test_labels(models)
 

@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from src.data_loader import load_dataset
 from src.methods import KernelSVCBen, KernelSVCLilian, KernelLR
 
-def train_model(k, kernel, C=1.0, method='SVM', test_size=0.2, random_state=42):
+def train_model(k, kernel, method='SVM', test_size=0.2, random_state=42):
     """
     Train a Kernel SVM model on dataset k and evaluate on a validation set.
 
@@ -26,7 +26,7 @@ def train_model(k, kernel, C=1.0, method='SVM', test_size=0.2, random_state=42):
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=test_size, random_state=random_state)
 
     if method == 'SVM':
-        model = KernelSVCLilian(C=C, kernel=kernel)
+        model = KernelSVCLilian(C=1.0, kernel=kernel)
     else:
         model = KernelLR(kernel=kernel, lmbda=0.01, iters=1000, tol=1.e-5)
 
@@ -43,7 +43,7 @@ def train_model(k, kernel, C=1.0, method='SVM', test_size=0.2, random_state=42):
 
     return model, val_acc
 
-def train_all_models(kernel, C=1.0, method='SVM'):
+def train_all_models(kernel, method='SVM'):
     """
     Train models for all datasets (k=0,1,2) with a validation set.
 
@@ -60,7 +60,7 @@ def train_all_models(kernel, C=1.0, method='SVM'):
     accuracies = {}
 
     for k in range(3):
-        model, val_acc = train_model(k, kernel, C, method)
+        model, val_acc = train_model(k, kernel, method)
         models[k] = model
         accuracies[k] = val_acc
 

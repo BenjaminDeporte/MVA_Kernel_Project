@@ -1,12 +1,17 @@
 import numpy as np
 from scipy import optimize
 from scipy.optimize import LinearConstraint
+from sklearn.svm import SVC
+import os
+import pandas as pd
+from kernels import KernelSpectrum, KernelMismatch
+from sklearn.metrics import accuracy_score
 
 #----------------------------------------
 # ALGO SVC BEN
 #----------------------------------------
 
-class KernelSVCBen():
+class KernelSVCBenT():
     
     def __init__(self, C, kernel, type='non-linear', epsilon = 1e-3):
         self.type = type
@@ -88,11 +93,11 @@ class KernelSVCBen():
         return 2 * (d+self.b> 0) - 1
 
 
-#----------------------------------------
+#-----------------------------------------
 # ALGO SVC LILIAN
-#----------------------------------------
+#-----------------------------------------
 
-class KernelSVCLilian():
+class KernelSVCLilianT():
     
     def __init__(self, C, kernel, epsilon = 1e-3):
         self.type = 'non-linear'
@@ -150,6 +155,8 @@ class KernelSVCLilian():
         
         self.b =  np.mean(self.support_y - self.separating_function(self.support))#''' -----------------offset of the classifier------------------ '''
         self.norm_f = np.sqrt(np.dot(self.alpha*y, np.dot(K, self.alpha*y)))# '''------------------------RKHS norm of the function f ------------------------------'''
+        
+        return self
 
 
     ### Implementation of the separting function $f$ 
@@ -164,3 +171,97 @@ class KernelSVCLilian():
         """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
         return 2 * (d+self.b> 0) - 1
+
+
+
+#------------------------------------------------------------------------
+
+
+def test_algo():
+    # Compare algo maison et clf de sklearn
+
+    # get data ---------------------------------------------
+    current_dir = os.getcwd()
+
+    data_dir = current_dir + '/data/'
+
+    filename = data_dir + 'Xtr0.csv'
+    labelname = data_dir + 'Ytr0.csv'
+
+    # filename = data_dir + 'Xtr1.csv'
+    # labelname = data_dir + 'Ytr1.csv'
+
+    # filename = data_dir + 'Xtr2.csv'
+    # labelname = data_dir + 'Ytr2.csv'
+
+    with open(filename,'r') as f:
+        X = pd.read_csv(f, index_col=0)
+        
+    with open(labelname, 'r') as g:
+        y = pd.read_csv(g, index_col=0)
+        
+    # subset -----------------------------------------------
+    N = 500
+    X = X[:N]
+    y = y[:N]
+    
+    id_train = int(N * .9)
+    X_train = np.array(X).squeeze()[:id_train]
+    y_train = np.array(y).squeeze()[:id_train]
+    X_test = np.array(X).squeeze()[id_train:]
+    y_test = np.array(y).squeeze()[id_train:]
+        
+    # instantiate kernel spectrum ----------------------------
+    # longueur string
+    k = 3
+
+    choix = 'spectrum'
+    # choix = 'mismatch'
+
+    if choix == 'spectrum':
+        ks = KernelSpectrum(k=k)
+    else :
+        ks = KernelMismatch(k=k)
+
+    kernel = ks.k_value
+
+    #---------- algo scikit -----------------------------------
+    clf = SVC(kernel='precomputed')
+
+    print(f"Running scikit model on {filename} with {N} samples, kernel {choix} avec k = {k}")
+
+    print(f"Computing Gram matrix on X_train")
+    gram = ks.k_matrix(X_train, X_train, verbose=True)
+
+    print(f"Fitting scikit model")
+    clf.fit(gram, y_train)
+
+    print(f"Computing Gram matrix on X_test")
+    if choix == 'spectrum':
+        gramt = ks.k_matrix(X_test, X_train)
+    else :
+        gramt = ks.k_matrix(X_test, X_train, verbose=True)
+
+    print(f"Computing prediction and accuracy")
+    y_pred = clf.predict(gramt)
+
+    print(f"Accuracy = {accuracy_score(y_pred, y_test)*100:.1f}%")
+    
+    #---------- algo maison -----------------------------------
+    
+    kernel = ks.k_matrix
+    
+    clf_maison = KernelSVCBenT(C=1.0, kernel=kernel)
+    print(f"Running maison model on {filename} with {N} samples, kernel {choix} avec k = {k}")
+    
+    print(f"Fitting modèle maison")
+    clf_maison = clf_maison.fit(X_train, y_train)
+    
+    print(f"Computing prediction and accuracy")
+    y_pred_maison = clf_maison.predict(X_test)
+    
+    print(f"Accuracy = {accuracy_score(y_pred_maison, y_test)*100:.1f}%")
+    
+    
+if __name__ == '__main__':
+    test_algo() 

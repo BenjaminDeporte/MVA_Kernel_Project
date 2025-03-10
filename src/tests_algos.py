@@ -185,14 +185,14 @@ def test_algo():
 
     data_dir = current_dir + '/data/'
 
-    filename = data_dir + 'Xtr0.csv'
-    labelname = data_dir + 'Ytr0.csv'
+    # filename = data_dir + 'Xtr0.csv'
+    # labelname = data_dir + 'Ytr0.csv'
 
     # filename = data_dir + 'Xtr1.csv'
     # labelname = data_dir + 'Ytr1.csv'
 
-    # filename = data_dir + 'Xtr2.csv'
-    # labelname = data_dir + 'Ytr2.csv'
+    filename = data_dir + 'Xtr2.csv'
+    labelname = data_dir + 'Ytr2.csv'
 
     with open(filename,'r') as f:
         X = pd.read_csv(f, index_col=0)
@@ -210,10 +210,16 @@ def test_algo():
     y_train = np.array(y).squeeze()[:id_train]
     X_test = np.array(X).squeeze()[id_train:]
     y_test = np.array(y).squeeze()[id_train:]
+    
+    def recast_y(y):
+        return 2*y-1
+    
+    y_train = recast_y(y_train)
+    y_test = recast_y(y_test)
         
     # instantiate kernel spectrum ----------------------------
     # longueur string
-    k = 3
+    k = 2
 
     choix = 'spectrum'
     # choix = 'mismatch'

@@ -1,4 +1,4 @@
-from src.kernels import KernelSpectrum
+from src.kernels import KernelSpectrum, KernelMismatch
 
 def test_kernel_spectrum():
     
@@ -16,7 +16,7 @@ def test_kernel_spectrum():
     ks = KernelSpectrum(k=3)
     
     for i, (x1, x2, target_value) in enumerate(tests):
-        print("\n")
+        print("\n KernelSpectrum(k=3)")
         k = ks.k_value(x1, x2)
         print(f"Test {i+1} : x1={x1}, x2={x2}, target_value={target_value}, kernel calculé ={k}")
         assert k == target_value, f"Test {i+1} failed"
@@ -24,18 +24,25 @@ def test_kernel_spectrum():
         
     ks = KernelSpectrum(k=4)
     for i, (x1, x2, target_value) in enumerate(tests):
-        print("\n")
+        print("\n KernelSpectrum(k=4)")
         k = ks.k_value(x1, x2)
         print(f"Test {i+1} : x1={x1}, x2={x2}, kernel calculé ={k}")
         assert ks.k_value(x1,x2,verbose=False) == ks.k_value(x2,x1,verbose=False), f"Kernel non symétrique"
         
     ks = KernelSpectrum(k=2)
     for i, (x1, x2, target_value) in enumerate(tests):
-        print("\n")
+        print("\nKernelSpectrum(k=2)")
         k = ks.k_value(x1, x2)
         print(f"Test {i+1} : x1={x1}, x2={x2}, kernel calculé ={k}")
         assert ks.k_value(x1,x2,verbose=False) == ks.k_value(x2,x1,verbose=False), f"Kernel non symétrique"
         
+    ks = KernelMismatch(k=2, m=0)
+    for i, (x1, x2, target_value) in enumerate(tests):
+        print("\n KernelMismatch(k=2, m=0)")
+        k = ks.k_value(x1, x2)
+        print(f"Test {i+1} : x1={x1}, x2={x2}, kernel calculé ={k}")
+        assert ks.k_value(x1,x2) == ks.k_value(x2,x1), f"Kernel non symétrique"
+
     # test matrix
     xs = ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'CGGATGAGG'] #, 'CCGATGAGG', 'AAACGTGCAAA']
     

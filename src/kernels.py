@@ -1,13 +1,6 @@
-# file for Kernels classes
 import numpy as np
 from tqdm import tqdm
-
-# DNA alphabet
-dna_alphabet = ['A','G','C','T']
-
-# import for cartesian product
 from itertools import product
-# import counter for counting uplets
 from collections import Counter
 
 #----------------------------------------------
@@ -18,7 +11,7 @@ class KernelSpectrum():
     
     dna_alphabet = ['A','G','C','T']
     
-    def __init__(self,k=None):
+    def __init__(self,k=None,verbose=True):
         # default value for k
         if k is None:
             self.k=3
@@ -29,8 +22,9 @@ class KernelSpectrum():
         iter_tuples = product(self.dna_alphabet, repeat=self.k)
         # change from tuples of k characters to strings
         self.all_kuplets = [ ''.join(t) for t in iter_tuples]
+        self.verbose = verbose
         
-    def k_value(self,x1,x2):
+    def k_value(self,x1,x2, verbose=True):
         """Compute K(x,y)
 
         Args:
@@ -52,26 +46,39 @@ class KernelSpectrum():
             x2 = x2[0]
         if isinstance(x1, str) is False or isinstance(x2, str) is False:
             raise NameError('Can not compute a kernel on data not string')
+        
+        if verbose is True:
+            print(f'Computing kernel between x1={x1} and x2={x2}, longueur strings : k = {self.k}')
             
         # list all k-uplets in x1
         x1_kuplets = [ x1[i:i+self.k] for i in range(len(x1)-self.k+1) ]
+        if verbose is True:
+            print(f'liste brute des x1_kuplets={x1_kuplets}')
         c1 = Counter()
         for uplet in x1_kuplets:
             c1[uplet] += 1
+        if verbose is True:
+            print(f'liste nette des k-uplets x1 avec comptes ={c1}')
         # list all k-uplets in x2
         x2_kuplets = [ x2[i:i+self.k] for i in range(len(x2)-self.k+1) ]
+        if verbose is True:
+            print(f'liste brute des x2_kuplets={x2_kuplets}')
         c2 = Counter()
         for uplet in x2_kuplets:
             c2[uplet] += 1
+        if verbose is True:
+            print(f'liste nette des k-uplets x2 avec comptes ={c2}')
         # compute kernel value
         kernel = 0
         for uplet, occurences_in_x1 in c1.items():
             occurences_in_x2 = c2.get(uplet, 0)
+            if verbose is True:
+                print(f'Test du k-uplet de x1 ={uplet}, occurences_in_x1={occurences_in_x1}, occurences_in_x2={occurences_in_x2} => kernel += {occurences_in_x1 * occurences_in_x2}')
             kernel += occurences_in_x1 * occurences_in_x2
             
         return kernel
     
-    def k_matrix(self, xs, ys, verbose=False):
+    def k_matrix(self, xs, ys, verbose=True):
         """compute and return Gram matrix K(x_i, y_j) 
         for i in range(xs), j in range(xs)
 
@@ -93,21 +100,28 @@ class KernelSpectrum():
         ny = y_data.shape[0]
         gram = np.zeros((nx, ny))
         
+        if self.verbose is True:
+            print(f'Computing Gram matrix between x1s={x_data} and x2s={y_data}, longueur strings : k = {self.k}')
+        
         if verbose is True:
             for i in tqdm(range(nx)):
                 x_i = x_data[i]
                 for j in range(ny):
                     y_j = y_data[j]
-                    gram[i,j] = self.k_value(x_i, y_j)
+                    gram[i,j] = self.k_value(x_i, y_j, verbose=False)
+                    if self.verbose is True:
+                        print(f'Computing kernel between x1={x_i} and x2={y_j}, kernel={gram[i,j]}')
         else:
-            for i in tqdm(range(nx)):
+            for i in range(nx):
                 x_i = x_data[i]
                 for j in range(ny):
                     y_j = y_data[j]
-                    gram[i,j] = self.k_value(x_i, y_j)
+                    gram[i,j] = self.k_value(x_i, y_j, verbose=False)
+                    
+        # if self.verbose is True:
+        #     print(f'Gram matrix computed : {gram}')
     
         return gram
-
 
 #----------------------------------------
 # MISMATCH
@@ -225,7 +239,7 @@ class KernelMismatch():
                     y_j = y_data[j]
                     gram[i,j] = self.k_value(x_i, y_j)
         else:
-            for i in tqdm(range(nx)):
+            for i in range(nx):
                 x_i = x_data[i]
                 for j in range(ny):
                     y_j = y_data[j]
@@ -240,81 +254,3 @@ class KernelMismatch():
 
 class KernelSubstring():
     pass
-
-
-#------------------------------------------
-# TESTS
-#-----------------------------------------
-
-def test_kernel_spectrum():
-    
-    # tests
-    # tests = [
-    #     ['AGGCTTCGAC', 'CGGATGAGG', 1],   # common k_uplets : AGG (1,1), => k_value = 1
-    #     ['AGGCTTCGAC', 'CCGATGAGG', 2],   # common k_uplets : AGG (1,1), CGA (1,1 )=> k_value = 2
-    #     ['AAAAAAAAA', 'AAACGTGCAAA', 14]    # common k_uplets : AAA (7 in 1, 2 in 2) => k_value = 14
-    # ]
-    
-    # ks = KernelSpectrum(k=3)
-    
-    # for i,test in enumerate(tests):
-    #     x1 = test[0]
-    #     x2 = test[1]
-    #     target = test[2]
-    #     k_value = ks.k_value(x1,x2)
-    #     assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
-        
-    # tests2 = [
-    #     ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'AAACGTGCAAA']
-    # ]
-        
-    # for xs in tests2:
-    #     gram = ks.k_matrix(xs,xs)
-    #     print(gram)
-        
-    # print(f"Tests passés avec succès")
-    
-    # tests = [
-    #     ['AAG', 'TGC', 1],  # with m=1, k=2 : only match is 'TG'
-    #     ['AGGT', 'CGC', 4]  # with m=1, k=2 : matches are : (CG in x2 + AG in x1), (GC in x2 et GG in x1), (CG in x2 at GG in x1), (GC in x2 et GT in x1)
-    #     ]
-    
-    # ks = KernelMismatch(k=2)
-    
-    # for i,test in enumerate(tests):
-    #     x1 = test[0]
-    #     x2 = test[1]
-    #     target = test[2]
-    #     k_value = ks.k_value(x1,x2, mismatches=1)
-    #     assert k_value == target, f'Revoir code KernelSpectrum : test {i}'
-        
-    # print(f"Tests ok avec m=1")
-    
-    ks = KernelMismatch(k=3)
-    
-    tests = [
-        ['AGGCTTCGAC', 'CGGATGAGG', 1],   # common k_uplets : AGG (1,1), => k_value = 1
-        # ['AGGCTTCGAC', 'CCGATGAGG', 2],   # common k_uplets : AGG (1,1), CGA (1,1 )=> k_value = 2
-        # ['AAAAAAAAA', 'AAACGTGCAAA', 14]    # common k_uplets : AAA (7 in 1, 2 in 2) => k_value = 14
-    ]
-        
-    for i,test in enumerate(tests):
-        x1 = test[0]
-        x2 = test[1]
-        target = test[2]
-        k_value = ks.k_value(x1,x2, mismatches=1, verbose=True)
-        print(f"mismatches = 1, x1 = {x1}, x2 = {x2}, k_value = {k_value}")
-        k_value = ks.k_value(x1,x2, mismatches=2, verbose=True)
-        print(f"mismatches = 2, x1 = {x1}, x2 = {x2}, k_value = {k_value}")
-    
-    print(f"Gram matrix example")   
-    tests2 = [
-        ['AGGCTTCGAC', 'CGGATGAGG', 'AAAAAAAAA', 'AAACGTGCAAA']
-    ]
-        
-    for xs in tests2:
-        gram = ks.k_matrix(xs,xs)
-        print(gram)
-    
-if __name__ == '__main__':
-    test_kernel_spectrum()

@@ -37,6 +37,12 @@ def test_algo(k, choix, verbose):
     Y = Y[:N]
     
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.9, random_state=42)
+    
+    def recast_y(y):
+        return 2*y-1
+    
+    Y_train = recast_y(Y_train)
+    Y_val = recast_y(Y_val)
         
     # instantiate kernel spectrum ----------------------------
 

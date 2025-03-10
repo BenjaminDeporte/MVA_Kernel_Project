@@ -128,12 +128,12 @@ def grid_search(choix='spectrum'):
     Ys = [Y1, Y2, Y3]
 
     # subset
-    N = 300
+    N = 2000
     test_ratio = 0.2
     
     # Hyperparameters
-    ks = [3,4,5]
-    Cs = [1.0,1.5,2.0]
+    ks = [6,7,8]
+    Cs = [2.0,2.5]
     
     id_test = 0
     

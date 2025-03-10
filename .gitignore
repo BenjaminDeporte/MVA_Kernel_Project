@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 
 .ipynb_checkpoints/
+.DS_Store
+submission.csv

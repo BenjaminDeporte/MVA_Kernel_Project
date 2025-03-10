@@ -4,8 +4,8 @@ import pandas as pd
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from ..src.methods import KernelSVCLilian, KernelSVCBen
-from ..src.kernels import KernelSpectrum, KernelMismatch
+from methods import KernelSVCLilian, KernelSVCBen
+from kernels import KernelSpectrum, KernelMismatch
 
 def test_algo(k, choix, verbose):
     # Compare algo maison et clf de sklearn
@@ -32,11 +32,11 @@ def test_algo(k, choix, verbose):
     Y = np.array(Y).squeeze()
         
     # subset -----------------------------------------------
-    N = 500
+    N = 300
     X = X[:N]
     Y = Y[:N]
     
-    X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.9, random_state=42)
+    X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.1, random_state=42)
     
     def recast_y(y):
         return 2*y-1
@@ -45,7 +45,6 @@ def test_algo(k, choix, verbose):
     Y_val = recast_y(Y_val)
         
     # instantiate kernel spectrum ----------------------------
-
 
     if choix == 'spectrum':
         ks = KernelSpectrum(k=k)
@@ -73,6 +72,7 @@ def test_algo(k, choix, verbose):
     y_pred = clf.predict(gramt)
 
     print(f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}%")
+    print(f"Prédictions scikit = {np.unique(y_pred, return_counts=True)}")
     
     #---------- algo maison -----------------------------------
     
@@ -88,10 +88,12 @@ def test_algo(k, choix, verbose):
     y_pred_maison = clf_maison.predict(X_val)
     
     print(f"Accuracy = {accuracy_score(y_pred_maison, Y_val)*100:.1f}%")
-    
+    print(f"Prédictions maison = {np.unique(y_pred_maison, return_counts=True)}")
+
     
 if __name__ == '__main__':
-    k = 3
-    choix = 'spectrum'
+    choix = 'mismatch'
     verbose = True
-    test_algo(k, choix, verbose) 
+    for k in [3]:
+        print(f"---------------------------------------------------------------------")
+        test_algo(k, choix, verbose) 

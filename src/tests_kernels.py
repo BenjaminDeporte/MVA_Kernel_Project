@@ -1,4 +1,4 @@
-from src.kernels import KernelSpectrum
+from kernels import KernelSpectrum
 
 def test_kernel_spectrum():
     

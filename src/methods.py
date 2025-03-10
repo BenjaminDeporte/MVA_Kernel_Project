@@ -1,6 +1,7 @@
 import numpy as np
-from scipy import optimize#, LinearConstraint
-from src.utils import sigmoid
+from scipy import optimize
+from scipy.optimize import LinearConstraint
+from utils import sigmoid
 
 #----------------------------------------
 # ALGO SVC BEN
@@ -54,7 +55,8 @@ class KernelSVCBen():
                                    x0=np.ones(N), 
                                    method='SLSQP', 
                                    jac=lambda alpha: grad_loss(alpha), 
-                                   constraints=constraints)
+                                   constraints=constraints,
+                                   )
         self.alpha = optRes.x
 
         ## Assign the required attributes
@@ -85,7 +87,9 @@ class KernelSVCBen():
     def predict(self, X):
         """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
-        return d+self.b> 0
+        y_pred = np.where(d + self.b >0, 1, -1)
+        
+        return y_pred
 
 
 #----------------------------------------
@@ -168,6 +172,7 @@ class KernelSVCLilian():
 #----------------------------------------
 # ALGO KLR
 #----------------------------------------
+
 class WeightedKernelRR:
     def __init__(self, kernel, weights, lmbda):
         self.lmbda = lmbda

@@ -11,7 +11,7 @@ class KernelSpectrum():
     
     dna_alphabet = ['A','G','C','T']
     
-    def __init__(self,k=None,verbose=True):
+    def __init__(self,k=None,verbose=False):
         # default value for k
         if k is None:
             self.k=3
@@ -24,7 +24,7 @@ class KernelSpectrum():
         self.all_kuplets = [ ''.join(t) for t in iter_tuples]
         self.verbose = verbose
         
-    def k_value(self,x1,x2, verbose=True):
+    def k_value(self,x1,x2, verbose=False):
         """Compute K(x,y)
 
         Args:
@@ -78,7 +78,7 @@ class KernelSpectrum():
             
         return kernel
     
-    def k_matrix(self, xs, ys, verbose=True):
+    def k_matrix(self, xs, ys, verbose=False):
         """compute and return Gram matrix K(x_i, y_j) 
         for i in range(xs), j in range(xs)
 

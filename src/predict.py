@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from src.data_loader import load_dataset
 
@@ -20,6 +21,7 @@ def predict_test_labels(models):
 
         model = models[k]
         Y_pred = model.predict(X_test)
+        Y_pred = np.array(Y_pred >= 0, dtype=int)
 
         ids = [1000 * k + i for i in range(len(Y_pred))]
 

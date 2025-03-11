@@ -1,4 +1,4 @@
-from src.kernels import KernelSpectrum, KernelMismatch
+from src.kernels import KernelSpectrum, KernelMismatch, FastKernelMismatch
 
 def test_kernel_spectrum():
     
@@ -36,7 +36,14 @@ def test_kernel_spectrum():
         print(f"Test {i+1} : x1={x1}, x2={x2}, kernel calculé ={k}")
         assert ks.k_value(x1,x2,verbose=False) == ks.k_value(x2,x1,verbose=False), f"Kernel non symétrique"
         
-    ks = KernelMismatch(k=2, m=0)
+    ks = KernelMismatch(k=4, m=0)
+    for i, (x1, x2, target_value) in enumerate(tests):
+        print("\n KernelMismatch(k=2, m=0)")
+        k = ks.k_value(x1, x2)
+        print(f"Test {i+1} : x1={x1}, x2={x2}, kernel calculé ={k}")
+        assert ks.k_value(x1,x2) == ks.k_value(x2,x1), f"Kernel non symétrique"
+
+    ks = FastKernelMismatch(k=4, m=0)
     for i, (x1, x2, target_value) in enumerate(tests):
         print("\n KernelMismatch(k=2, m=0)")
         k = ks.k_value(x1, x2)

@@ -85,7 +85,7 @@ class KernelSVCBen():
     def predict(self, X):
         """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
-        return d+self.b> 0
+        return np.array(2*(d+self.b>0)-1, dtype=int)
 
 
 #----------------------------------------
@@ -161,9 +161,9 @@ class KernelSVCLilian():
     
     
     def predict(self, X):
-        """ Predict y values in {0, 1} """
+        """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
-        return d+self.b> 0
+        return np.array(2*(d+self.b>0)-1, dtype=int)
 
 #----------------------------------------
 # ALGO KLR
@@ -231,4 +231,5 @@ class KernelLR:
         return self.kernel(x, self.support) @ self.alpha.T
 
     def predict(self, X):
-        return np.array(sigmoid(self.regression_function(X))>=0.5, dtype=int)
+        pred = np.array(sigmoid(self.regression_function(X))>=0.5, dtype=int)
+        return np.where(pred > 0, 1, -1)

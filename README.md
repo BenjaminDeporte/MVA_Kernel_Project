@@ -9,40 +9,40 @@ Transcription factors (TFs) are regulatory proteins that bind specific sequence 
 ## Installation
 ### Prerequisites
 Ensure you have Python 3.x installed. You can check by running:
-'''bash
+```bash
 python --version
-'''
+```
 
 ### Create a Virtual Environment
 #### Using venv
-'''bash
+```bash
 python -m venv venv
 source venv/bin/activate
-'''
+```
 
 #### Using Conda
-'''bash
+```bash
 conda env create -f environment.yml
 conda activate kernel_project
-'''
+```
 
 ### Install Dependencies
-'''bash
+```bash
 pip install -r requirements.txt
-'''
+```
 
 ## Usage
-'''bash
+```bash
 python start.py
-'''
+```
 
 ## Running Tests
-Test algorithms
-'''bash
+Test algorithms:
+```bash
 python -m test.tests_algos
-'''
+```
 
 Test Kernels
-'''bash
+```bash
 python -m test.tests_kernels
-'''
+```

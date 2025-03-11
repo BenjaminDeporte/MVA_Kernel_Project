@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from methods import KernelSVCLilian, KernelSVCBen
 from kernels import KernelSpectrum, KernelMismatch
 import pickle
+import timeit
 
 def test_algo(k, choix, verbose):
     # Compare algo maison et clf de sklearn
@@ -129,12 +130,12 @@ def grid_search(choix='spectrum'):
     Ys = [Y1, Y2, Y3]
 
     # subset
-    N = 2000
-    test_ratio = 0.1
+    N = 1000
+    test_ratio = 0.2
     
     # Hyperparameters
     ks = [7]
-    Cs = [2.0]
+    Cs = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0]
     
     id_test = 0
     
@@ -143,6 +144,9 @@ def grid_search(choix='spectrum'):
     
     # fichier resultats
     res_file = os.getcwd() + "/rapport/results_grid_search.txt"
+    
+    # overall results
+    results = []
     
     def ecrit(msg):
         with open(res_file, 'a') as f:
@@ -155,6 +159,8 @@ def grid_search(choix='spectrum'):
             news = f"\n k={k} - C={C} - N={N} (train {int(N*(1-test_ratio))}, test {int(N*test_ratio)}) -------------------------------------------"
             print(news)
             ecrit(news)
+            
+            kC_results = []
             
             for i, (X, Y) in enumerate(zip(Xs,Ys)):
                 
@@ -176,32 +182,32 @@ def grid_search(choix='spectrum'):
                 
                 # reporting = f"Test {id_test} - k = {k} - C = {C} - dataset {i}"
                 
-                #---------- algo scikit -----------------------------------
-                clf = SVC(kernel='precomputed')
+                # #---------- algo scikit -----------------------------------
+                # clf = SVC(kernel='precomputed')
                 
-                res_scikit = f"Running scikit model - dataset {i} - "
+                # res_scikit = f"Running scikit model - dataset {i} - "
                 
-                # print(f"Computing Gram matrix on X_train")
-                gram = ks.k_matrix(X_train, X_train, verbose=False)
+                # # print(f"Computing Gram matrix on X_train")
+                # gram = ks.k_matrix(X_train, X_train, verbose=False)
                 
-                # print(f"Fitting scikit model")
-                clf.fit(gram, Y_train)
+                # # print(f"Fitting scikit model")
+                # clf.fit(gram, Y_train)
                 
-                # print(f"Computing Gram matrix on X_test")
-                if verbose is False:
-                    gramt = ks.k_matrix(X_val, X_train)
-                else :
-                    gramt = ks.k_matrix(X_val, X_train, verbose=False)
+                # # print(f"Computing Gram matrix on X_test")
+                # if verbose is False:
+                #     gramt = ks.k_matrix(X_val, X_train)
+                # else :
+                #     gramt = ks.k_matrix(X_val, X_train, verbose=False)
                 
-                # print(f"Computing prediction and accuracy")
-                y_pred = clf.predict(gramt)
+                # # print(f"Computing prediction and accuracy")
+                # y_pred = clf.predict(gramt)
                 
-                res_scikit += f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}% - "
-                # print(f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}%")
-                res_scikit += f"Prédictions scikit = {np.unique(y_pred, return_counts=True)}"
+                # res_scikit += f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}% - "
+                # # print(f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}%")
+                # res_scikit += f"Prédictions scikit = {np.unique(y_pred, return_counts=True)}"
                 
-                print(res_scikit)
-                ecrit(res_scikit)
+                # print(res_scikit)
+                # ecrit(res_scikit)
                 
                 #---------- algo maison -----------------------------------
                 
@@ -226,11 +232,22 @@ def grid_search(choix='spectrum'):
                 print(res_maison)
                 ecrit(res_maison)
                 
+                # log resultats
+                results.append([id_test, k, C, i, accuracy_score(y_pred_maison, Y_val)])
+                
+                kC_results.append(accuracy_score(y_pred_maison, Y_val))
+                
+            kC_results_avg = np.mean(kC_results)
+            print(f"Average accuracy for k={k} and C={C} : {kC_results_avg*100:.1f}%")
+            ecrit(f"Average accuracy for k={k} and C={C} : {kC_results_avg*100:.1f}%")
+                
                 # sauve modèle entrainé
-                savepath = current_dir + f"/src/model_{id_test}.pkl"
-                with open(savepath, 'wb') as f:
-                    pickle.dump(clf_maison, f)
-                print(f"sauvegarde modèle entrainé sur dataset Xtr{id_test}")
+                # savepath = current_dir + f"/src/model_{id_test}.pkl"
+                # with open(savepath, 'wb') as f:
+                #     pickle.dump(clf_maison, f)
+                # print(f"sauvegarde modèle entrainé sur dataset Xtr{id_test}")
+                
+    return results
                 
                 
                 
@@ -327,7 +344,16 @@ if __name__ == '__main__':
     choix = 'spectrum'
     verbose = True
     
-    grid_search()
+    start = timeit.default_timer()
+    results = grid_search()
+    end = timeit.default_timer()
+    print(f"Temps d'exécution : {end-start:.1f} secondes")
+    
+    results_file = os.getcwd() + "/rapport/liste_resultats.pkl"
+    with open(results_file, 'wb') as f:
+        pickle.dump(results_file, f)
+        
+    # print(results)
     # for k in [3]:
     #     print(f"---------------------------------------------------------------------")
     #     test_algo(k, choix, verbose) 

@@ -68,13 +68,16 @@ class KernelSpectrum():
             c2[uplet] += 1
         if verbose is True:
             print(f'liste nette des k-uplets x2 avec comptes ={c2}')
+            
         # compute kernel value
-        kernel = 0
-        for uplet, occurences_in_x1 in c1.items():
-            occurences_in_x2 = c2.get(uplet, 0)
-            if verbose is True:
-                print(f'Test du k-uplet de x1 ={uplet}, occurences_in_x1={occurences_in_x1}, occurences_in_x2={occurences_in_x2} => kernel += {occurences_in_x1 * occurences_in_x2}')
-            kernel += occurences_in_x1 * occurences_in_x2
+        # kernel = 0
+        # for uplet, occurences_in_x1 in c1.items():
+        #     occurences_in_x2 = c2.get(uplet, 0)
+        #     if verbose is True:
+        #         print(f'Test du k-uplet de x1 ={uplet}, occurences_in_x1={occurences_in_x1}, occurences_in_x2={occurences_in_x2} => kernel += {occurences_in_x1 * occurences_in_x2}')
+        #     kernel += occurences_in_x1 * occurences_in_x2
+            
+        kernel = sum(count * c2.get(uplet, 0) for uplet, count in c1.items())
             
         return kernel
     

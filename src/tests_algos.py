@@ -6,6 +6,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from methods import KernelSVCLilian, KernelSVCBen
 from kernels import KernelSpectrum, KernelMismatch
+import pickle
 
 def test_algo(k, choix, verbose):
     # Compare algo maison et clf de sklearn
@@ -129,11 +130,11 @@ def grid_search(choix='spectrum'):
 
     # subset
     N = 2000
-    test_ratio = 0.2
+    test_ratio = 0.1
     
     # Hyperparameters
-    ks = [6,7,8]
-    Cs = [2.0,2.5]
+    ks = [7]
+    Cs = [2.0]
     
     id_test = 0
     
@@ -224,6 +225,12 @@ def grid_search(choix='spectrum'):
                 
                 print(res_maison)
                 ecrit(res_maison)
+                
+                # sauve modèle entrainé
+                savepath = current_dir + f"/src/model_{id_test}.pkl"
+                with open(savepath, 'wb') as f:
+                    pickle.dump(clf_maison, f)
+                print(f"sauvegarde modèle entrainé sur dataset Xtr{id_test}")
                 
                 
                 

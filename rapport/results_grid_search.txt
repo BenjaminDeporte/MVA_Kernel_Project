@@ -1,66 +1,14 @@
+Running maison model - dataset 2 - Accuracy = 64.2% - Prédictions maison = (array([-1,  1]), array([199, 201]))
+Average accuracy for k=9 and C=0.1 : 64.6%
 
- k=7 - C=0.5 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 58.5% - Prédictions maison = (array([-1,  1]), array([ 84, 116]))
-Running maison model - dataset 1 - Accuracy = 71.5% - Prédictions maison = (array([-1,  1]), array([ 95, 105]))
-Running maison model - dataset 2 - Accuracy = 62.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=0.5 : 64.2%
+ k=10 - C=0.1 - N=2000 (train 1600, test 400) -------------------------------------------
+Running maison model - dataset 0 - Accuracy = 57.5% - Prédictions maison = (array([-1,  1]), array([221, 179]))
+Running maison model - dataset 1 - Accuracy = 69.5% - Prédictions maison = (array([-1,  1]), array([176, 224]))
+Running maison model - dataset 2 - Accuracy = 64.2% - Prédictions maison = (array([-1,  1]), array([183, 217]))
+Average accuracy for k=10 and C=0.1 : 63.8%
 
- k=7 - C=0.75 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 96, 104]))
-Running maison model - dataset 2 - Accuracy = 62.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=0.75 : 64.5%
-
- k=7 - C=1.0 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 96, 104]))
-Running maison model - dataset 2 - Accuracy = 62.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=1.0 : 64.5%
-
- k=7 - C=1.25 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 83, 117]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 96, 104]))
-Running maison model - dataset 2 - Accuracy = 63.0% - Prédictions maison = (array([-1,  1]), array([130,  70]))
-Average accuracy for k=7 and C=1.25 : 64.7%
-
- k=7 - C=1.5 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.5% - Prédictions maison = (array([-1,  1]), array([ 95, 105]))
-Running maison model - dataset 2 - Accuracy = 63.0% - Prédictions maison = (array([-1,  1]), array([128,  72]))
-Average accuracy for k=7 and C=1.5 : 64.8%
-
- k=7 - C=1.75 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 58.5% - Prédictions maison = (array([-1,  1]), array([ 84, 116]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 96, 104]))
-Running maison model - dataset 2 - Accuracy = 62.5% - Prédictions maison = (array([-1,  1]), array([127,  73]))
-Average accuracy for k=7 and C=1.75 : 64.3%
-
- k=7 - C=2.0 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 96, 104]))
-Running maison model - dataset 2 - Accuracy = 63.0% - Prédictions maison = (array([-1,  1]), array([130,  70]))
-Average accuracy for k=7 and C=2.0 : 64.7%
-
- k=7 - C=2.25 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 94, 106]))
-Running maison model - dataset 2 - Accuracy = 62.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=2.25 : 64.5%
-
- k=7 - C=2.5 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 58.5% - Prédictions maison = (array([-1,  1]), array([ 84, 116]))
-Running maison model - dataset 1 - Accuracy = 73.0% - Prédictions maison = (array([-1,  1]), array([ 94, 106]))
-Running maison model - dataset 2 - Accuracy = 63.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=2.5 : 65.0%
-
- k=7 - C=2.75 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 58.5% - Prédictions maison = (array([-1,  1]), array([ 84, 116]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 94, 106]))
-Running maison model - dataset 2 - Accuracy = 63.5% - Prédictions maison = (array([-1,  1]), array([127,  73]))
-Average accuracy for k=7 and C=2.75 : 64.7%
-
- k=7 - C=3.0 - N=1000 (train 800, test 200) -------------------------------------------
-Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([ 85, 115]))
-Running maison model - dataset 1 - Accuracy = 72.0% - Prédictions maison = (array([-1,  1]), array([ 94, 106]))
-Running maison model - dataset 2 - Accuracy = 63.5% - Prédictions maison = (array([-1,  1]), array([129,  71]))
-Average accuracy for k=7 and C=3.0 : 64.8%
+ k=11 - C=0.1 - N=2000 (train 1600, test 400) -------------------------------------------
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([231, 169]))
+Running maison model - dataset 1 - Accuracy = 69.8% - Prédictions maison = (array([-1,  1]), array([177, 223]))
+Running maison model - dataset 2 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([190, 210]))
+Average accuracy for k=11 and C=0.1 : 64.6%

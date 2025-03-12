@@ -1,55 +1,48 @@
 # MVA_Kernel_Project
-MVA 2024-2025 Kernel Project
+Challenge from the MVA course Kernel methods for machine learning.
 
-Environnement : 
----------------
+## Description
+This challenge is a sequence classification task: predicting whether a DNA sequence region is binding site to a specific transcription factor.
+
+Transcription factors (TFs) are regulatory proteins that bind specific sequence motifs in the genome to activate or repress transcription of target genes. Genome-wide protein-DNA binding maps can be profiled using some experimental techniques and thus all genomics can be classified into two classes for a TF of interest: bound or unbound. In this challenge, we will work with three datasets corresponding to three different TFs.
+
+## Installation
+### Prerequisites
+Ensure you have Python 3.x installed. You can check by running:
+```bash
+python --version
+```
+
+### Create a Virtual Environment
+#### Using venv
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+#### Using Conda
+```bash
 conda env create -f environment.yml
 conda activate kernel_project
+```
 
-Jupyter Kernel (ah ah):
------------------------
-python -m ipykernel install --user --name=kernel_project
-jupyter kernelspec list
+### Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-Repo structure according to DLiP best practice:
------------------------------------------------
+## Usage
+```bash
+python start.py
+```
 
-├── LICENSE            <- Information about the license of your code. Companies may have guidelines on how to license code. [See more here](https://choosealicense.com/)
-├── README.md          <-  A README file for developers to understand the project setup and instructions.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Graphics and figures for use in reports.
-│ 
-├── requirements.txt   <- Required libraries and dependencies. 
-│
-├── pyproject.toml     <- Make the project pip installable with `pip install -e`.
-├── src/dlip           <- Source code of the project. `dlip` is the name of the package, you will import it using `import dlip`
-│   ├── __init__.py    <- Initializes the 'dlip' Python package.
-│   │
-│   ├── conf           <- Configuration files for experiments (YAML files managed by Hydra).
-│   │   └── train_linear.yaml
-│   │
-│   ├── data           <- Scripts to download or generate data
-│   │   └── make_dataset.py
-│   │
-│   ├── features       <- Scripts to turn raw data into features for modeling
-│   │   └── build_features.py
-│   │
-│   ├── models         <- Scripts to train models, to use trained models to make
-│   │   │                 predictions
-│   │   ├── predict_model.py
-│   │   └── train_model.py
-│   │
-│   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-│       └── visualize.py
+## Running Tests
+Test algorithms:
+```bash
+python -m test.tests_algos
+```
+
+Test Kernels
+```bash
+python -m test.tests_kernels
+```

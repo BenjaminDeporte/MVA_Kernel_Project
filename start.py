@@ -12,10 +12,10 @@ def main():
     """
     print("\nStarting the pipeline...")
 
-    kernel_method = KernelSpectrum(k=8)
-    #kernel_method = KernelMismatch(k=3)
+    kernel_method = KernelSpectrum(k=7)
+    #kernel_method = KernelMismatch(k=6, m=1)
 
-    models, _ = train_all_models(kernel=kernel_method.k_matrix, method='SVM')
+    models, _ = train_all_models(kernel=kernel_method.k_matrix, method='KLR')
 
     predict_test_labels(models)
 

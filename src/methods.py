@@ -90,7 +90,6 @@ class KernelSVCBen():
         return np.array(2*(d+self.b>0)-1, dtype=int)
 
 
-
 #----------------------------------------
 # ALGO SVC LILIAN
 #----------------------------------------
@@ -164,9 +163,11 @@ class KernelSVCLilian():
     
     
     def predict(self, X):
-        """ Predict y values in {0, 1} """
+        """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
         return np.array(2*(d+self.b>0)-1, dtype=int)
+
+      
 #----------------------------------------
 # ALGO KLR
 #----------------------------------------

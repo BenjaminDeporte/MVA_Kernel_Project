@@ -2,6 +2,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from src.data_loader import load_dataset
 from src.methods import KernelSVCBen, KernelSVCLilian, KernelLR
+from src.utils import recast_y
 
 def train_model(k, kernel, method='SVM', test_size=0.2, random_state=42):
     """
@@ -24,9 +25,11 @@ def train_model(k, kernel, method='SVM', test_size=0.2, random_state=42):
     X, Y, _ = load_dataset(k)
 
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=test_size, random_state=random_state)
+    Y_train = recast_y(Y_train)
+    Y_val = recast_y(Y_val)
 
     if method == 'SVM':
-        model = KernelSVCLilian(C=1.0, kernel=kernel)
+        model = KernelSVCLilian(C=2.0, kernel=kernel)
     else:
         model = KernelLR(kernel=kernel, lmbda=0.01, iters=1000, tol=1.e-5)
 

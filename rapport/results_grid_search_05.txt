@@ -1,0 +1,8 @@
+
+ k=7 - C=2.0 - N=2000 (train 1800, test 200) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 67.0% - Prédictions scikit = (array([-1,  1]), array([114,  86]))
+Running maison model - dataset 0 - Accuracy = 66.5% - Prédictions maison = (array([-1,  1]), array([ 99, 101]))
+Running scikit model - dataset 1 - Accuracy = 69.0% - Prédictions scikit = (array([-1,  1]), array([108,  92]))
+Running maison model - dataset 1 - Accuracy = 70.0% - Prédictions maison = (array([-1,  1]), array([112,  88]))
+Running scikit model - dataset 2 - Accuracy = 66.5% - Prédictions scikit = (array([-1,  1]), array([100, 100]))
+Running maison model - dataset 2 - Accuracy = 67.5% - Prédictions maison = (array([-1,  1]), array([114,  86]))

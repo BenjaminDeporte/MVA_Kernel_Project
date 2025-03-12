@@ -1,5 +1,6 @@
 import numpy as np
-from scipy import optimize#, LinearConstraint
+from scipy import optimize
+from scipy.optimize import LinearConstraint
 from src.utils import sigmoid
 
 #----------------------------------------
@@ -54,7 +55,8 @@ class KernelSVCBen():
                                    x0=np.ones(N), 
                                    method='SLSQP', 
                                    jac=lambda alpha: grad_loss(alpha), 
-                                   constraints=constraints)
+                                   constraints=constraints,
+                                   )
         self.alpha = optRes.x
 
         ## Assign the required attributes
@@ -165,9 +167,11 @@ class KernelSVCLilian():
         d = self.separating_function(X)
         return np.array(2*(d+self.b>0)-1, dtype=int)
 
+      
 #----------------------------------------
 # ALGO KLR
 #----------------------------------------
+
 class WeightedKernelRR:
     def __init__(self, kernel, weights, lmbda):
         self.lmbda = lmbda

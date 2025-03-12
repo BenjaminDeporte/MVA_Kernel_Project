@@ -1,0 +1,72 @@
+
+ k=6 - C=2.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([50, 50]))
+Running scikit model - dataset 1 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 1 - Accuracy = 62.0% - Prédictions maison = (array([-1,  1]), array([57, 43]))
+Running scikit model - dataset 2 - Accuracy = 63.0% - Prédictions scikit = (array([-1,  1]), array([54, 46]))
+Running maison model - dataset 2 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([58, 42]))
+
+ k=6 - C=2.5 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([50, 50]))
+Running scikit model - dataset 1 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 1 - Accuracy = 61.0% - Prédictions maison = (array([-1,  1]), array([56, 44]))
+Running scikit model - dataset 2 - Accuracy = 63.0% - Prédictions scikit = (array([-1,  1]), array([54, 46]))
+Running maison model - dataset 2 - Accuracy = 60.0% - Prédictions maison = (array([-1,  1]), array([57, 43]))
+
+ k=6 - C=3.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([50, 50]))
+Running scikit model - dataset 1 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([58, 42]))
+Running maison model - dataset 1 - Accuracy = 62.0% - Prédictions maison = (array([-1,  1]), array([57, 43]))
+Running scikit model - dataset 2 - Accuracy = 63.0% - Prédictions scikit = (array([-1,  1]), array([54, 46]))
+Running maison model - dataset 2 - Accuracy = 57.0% - Prédictions maison = (array([-1,  1]), array([60, 40]))
+
+ k=7 - C=2.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([64, 36]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([62, 38]))
+Running scikit model - dataset 1 - Accuracy = 66.0% - Prédictions scikit = (array([-1,  1]), array([63, 37]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([66, 34]))
+Running scikit model - dataset 2 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([52, 48]))
+Running maison model - dataset 2 - Accuracy = 61.0% - Prédictions maison = (array([-1,  1]), array([54, 46]))
+
+ k=7 - C=2.5 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([64, 36]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([62, 38]))
+Running scikit model - dataset 1 - Accuracy = 66.0% - Prédictions scikit = (array([-1,  1]), array([63, 37]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([66, 34]))
+Running scikit model - dataset 2 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([52, 48]))
+Running maison model - dataset 2 - Accuracy = 61.0% - Prédictions maison = (array([-1,  1]), array([54, 46]))
+
+ k=7 - C=3.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([64, 36]))
+Running maison model - dataset 0 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([62, 38]))
+Running scikit model - dataset 1 - Accuracy = 66.0% - Prédictions scikit = (array([-1,  1]), array([63, 37]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([66, 34]))
+Running scikit model - dataset 2 - Accuracy = 61.0% - Prédictions scikit = (array([-1,  1]), array([52, 48]))
+Running maison model - dataset 2 - Accuracy = 61.0% - Prédictions maison = (array([-1,  1]), array([54, 46]))
+
+ k=8 - C=2.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 56.0% - Prédictions scikit = (array([-1,  1]), array([69, 31]))
+Running maison model - dataset 0 - Accuracy = 55.0% - Prédictions maison = (array([-1,  1]), array([74, 26]))
+Running scikit model - dataset 1 - Accuracy = 68.0% - Prédictions scikit = (array([-1,  1]), array([61, 39]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([70, 30]))
+Running scikit model - dataset 2 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([48, 52]))
+Running maison model - dataset 2 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([52, 48]))
+
+ k=8 - C=2.5 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 56.0% - Prédictions scikit = (array([-1,  1]), array([69, 31]))
+Running maison model - dataset 0 - Accuracy = 55.0% - Prédictions maison = (array([-1,  1]), array([74, 26]))
+Running scikit model - dataset 1 - Accuracy = 68.0% - Prédictions scikit = (array([-1,  1]), array([61, 39]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([70, 30]))
+Running scikit model - dataset 2 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([48, 52]))
+Running maison model - dataset 2 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([52, 48]))
+
+ k=8 - C=3.0 - N=500 (train 400, test 100) -------------------------------------------
+Running scikit model - dataset 0 - Accuracy = 56.0% - Prédictions scikit = (array([-1,  1]), array([69, 31]))
+Running maison model - dataset 0 - Accuracy = 55.0% - Prédictions maison = (array([-1,  1]), array([74, 26]))
+Running scikit model - dataset 1 - Accuracy = 68.0% - Prédictions scikit = (array([-1,  1]), array([61, 39]))
+Running maison model - dataset 1 - Accuracy = 65.0% - Prédictions maison = (array([-1,  1]), array([70, 30]))
+Running scikit model - dataset 2 - Accuracy = 59.0% - Prédictions scikit = (array([-1,  1]), array([48, 52]))
+Running maison model - dataset 2 - Accuracy = 59.0% - Prédictions maison = (array([-1,  1]), array([52, 48]))

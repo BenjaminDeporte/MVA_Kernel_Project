@@ -46,6 +46,7 @@ def test_algo(nb_dataset, k, choix, verbose):
     y_pred = clf.predict(gramt) 
 
     print(f"Accuracy = {accuracy_score(y_pred, Y_val)*100:.1f}%")
+    print(f"Prédictions scikit = {np.unique(y_pred, return_counts=True)}")
     
     #---------- algo maison -----------------------------------
     
@@ -62,7 +63,7 @@ def test_algo(nb_dataset, k, choix, verbose):
     y_pred_maison = clf_maison.predict(X_val)
     
     print(f"Accuracy = {accuracy_score(y_pred_maison, Y_val)*100:.1f}%")
-    
+    print(f"Prédictions maison = {np.unique(y_pred_maison, return_counts=True)}")
     
 if __name__ == '__main__':
     nb_dataset = 2

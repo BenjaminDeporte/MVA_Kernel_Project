@@ -5,4 +5,3 @@ def sigmoid(x):
 
 def recast_y(y):
     return 2*y-1
-

@@ -1,6 +1,6 @@
 from src.train import train_all_models
 from src.predict import predict_test_labels
-from src.kernels import KernelSpectrum, KernelMismatch
+from src.kernels import KernelSpectrum, KernelMismatch, FastKernelMismatch
 
 def main():
     """
@@ -12,8 +12,8 @@ def main():
     """
     print("\nStarting the pipeline...")
 
-    kernel_method = KernelSpectrum(k=7)
-    #kernel_method = KernelMismatch(k=6, m=1)
+    #kernel_method = KernelSpectrum(k=7)
+    kernel_method = FastKernelMismatch(k=6, m=1)
 
     models, _ = train_all_models(kernel=kernel_method.k_matrix, method='KLR')
 
